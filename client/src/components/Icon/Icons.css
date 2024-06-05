@@ -1,0 +1,9 @@
+.CategoryIcons {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+.icon {
+    text-align: center;
+    cursor: pointer;
+}

@@ -1,0 +1,32 @@
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: black;
+  bottom: 0;
+  height: 30%;
+  width: 100%;
+  position: relative;
+}
+
+.company-info, .contact-info{
+  width: 30%;
+  color: white;
+  margin-left: 50px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.social-media a {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+.CategoryIcons {
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  cursor: pointer;
+}
+

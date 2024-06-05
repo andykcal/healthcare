@@ -1,0 +1,13 @@
+.Container{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    color:white;
+
+}
+.Bmi_img{
+    width: 500px;
+    height: 400px;
+    justify-content: center;
+    border:1px solid black
+}

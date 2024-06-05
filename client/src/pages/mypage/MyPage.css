@@ -1,0 +1,44 @@
+.MyPageContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    color:black;
+}
+
+.MyPageWrapper {
+    width: 300px;
+    padding: 20px;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+.MyPageButton {
+    width: 100%;
+    padding: 10px 0;
+    margin-top: 10px;
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    &:hover {
+      background-color: #0056b3;
+    }
+}
+.mypageInput {
+    width: 70%;
+    height: 40px;
+    margin-bottom: 15px;
+    padding: 8px 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+.profile-image {
+    width: 200px; /* 원하는 너비 설정 */
+    height: 200px; /* 원하는 높이 설정 */
+    object-fit: cover; /* 이미지 비율을 유지하면서 잘라냄 */
+    border-radius: 50%; /* 원형으로 만들기 */
+    border: 1px solid black; /* 경계선 추가 */
+    padding: 5px; /* 여백 추가 */
+    justify-content: center;
+}
