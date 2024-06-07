@@ -22,7 +22,7 @@ const Navbar = () => {
     e.preventDefault();
     try {
       const apiUrl = process.env.REACT_APP_API_URL;
-      console.log(apiUrl)
+      console.log("apiUrl",apiUrl)
       if (!apiUrl) {
         throw new Error("API URL is not defined in the environment variables");
       }

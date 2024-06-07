@@ -27,13 +27,14 @@ const Register = () => {
         dispatch({type:"Register"});
         try{
             const apiUrl =process.env.REACT_APP_API_URL;
-            console.log("apiUrl:",apiUrl)
             const res = await axios.post(`${apiUrl}/auth/register`,credentials,{withCredentials:true});
             dispatch({type:"REGISTER_SUCCESS",payload:res.data.details});
+            console.log("res.data.details",res.data.details);
             navigate("/")
-            console.log(res.data.details);
+            console.log("res.data.details",res.data.details);
         }catch(err){
-            dispatch({type:"REGISTER_FAILURE",payload:err.response.data});
+            console.error("Error",error.message);
+            dispatch({type:"REGISTER_FAILURE",payload:{message:err.message}})
         }
     }
 return(

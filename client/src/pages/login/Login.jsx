@@ -27,7 +27,7 @@ const Login = () => {
       const res = await axios.post(`${apiUrl}/auth/login`, credentials,{withCredentials:true});
       dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });
       navigate("/");
-      console.log(res.data.details);
+      console.log("res.data.deatails",res.data.details);
     } catch (err) {
       dispatch({ type: "LOGIN_FAILURE", payload: err.response.data });
     }

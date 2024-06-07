@@ -21,7 +21,6 @@ const Mypage = () =>{
     const [editMode,setEditMode]=useState(false);
     const {user,dispatch} =useContext(AuthContext);
     const navigate=useNavigate();
-    const cart = useSelector((state) => state.cart);
     useEffect(() => {
         if(user){
             setMpData({

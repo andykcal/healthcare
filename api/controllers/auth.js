@@ -1,5 +1,4 @@
 import User from "../models/User.js";
-import Cart from "../models/Cart.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { createError } from "../utils/error.js";
@@ -49,7 +48,7 @@ export const login = async(req,res,next) => {
         next(err);
     }
 }
-export const logout = (req,res) => {
+export const logout = (res) => {
     res
     .clearCookie("access_token",{
         httpOnly:true,
@@ -60,21 +59,6 @@ export const logout = (req,res) => {
     .status(200)
     .json({message:"Logged out successfully"})
 };
-
-export const createcart = async (req,res,next) => {
-    
-    try{  
-      const salt = bcrypt.genSaltSync(10);
-      const newCart = new Cart({
-          ...req.body,
-      });
-      
-      await newCart.save();
-      res.status(200).send("Cart has been created");
-      }catch(err){
-          next(err);
-      }
-  }
   export const FindId = async(req,res,next) => {
     try{
         const user = await User.findOne({username:req.body.username});

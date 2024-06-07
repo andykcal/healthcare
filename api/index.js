@@ -6,7 +6,6 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import authRoute from './routes/auth.js'
 import usersRoute from './routes/users.js'
-import cartsRoute from './routes/carts.js'
 import itemsRoute from './routes/items.js'
 import {fileURLToPath} from 'url';
 import path,{dirname} from "path";
@@ -32,7 +31,7 @@ mongoose.connection.on("disconnected", () => {
 });
 
 app.use(express.json());
-app.use(cookieParser())
+app.use(cookieParser());
 
 
 const corsOptions = {
@@ -42,7 +41,7 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-app.use((err,req,res,next) => {
+app.use((err,res) => {
     const errorStatus = err.status || 500;
     const errorMessage = err.message || "Something went wrong";
     return res.status(errorStatus).json({
@@ -58,8 +57,6 @@ app.use('/uploads',express.static(path.join(__dirname,'uploads')));
 app.use("/api/auth",authRoute);
 
 app.use("/api/users",usersRoute);
-
-app.use("/api/carts",cartsRoute);
 
 app.use("/api/items",itemsRoute);
 
