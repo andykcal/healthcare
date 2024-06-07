@@ -40,7 +40,6 @@ export const login = async(req,res,next) => {
             .cookie("access_token",token, {
                 httpOnly: true,
                 sameSite:'strict',
-                domain:"http://xyz.seoul.kr:3000",
                 path:"/"
             })
             .status(200)
