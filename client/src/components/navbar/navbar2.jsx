@@ -52,7 +52,7 @@ const Navbar2 = () => {
       <button className="logo" onClick={()=>navigate("/")}>Healthcare</button>    
         {user?  (
         <div className="navItems">
-          {user.id}님 환영합니다!
+          {user.username}님 환영합니다!
           <button className="navButton" onClick={(e) => logout(e, dispatch, navigate)}>로그아웃</button> 
         </div>
         ): (

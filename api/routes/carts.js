@@ -2,23 +2,19 @@ import express from "express";
 import {
     createCart,
     getCart,
-    getCartItems,
     updateCart,
     deleteCart
 } from "../controllers/cart.js";
-import Cart from "../models/Cart.js";
-import { verifyAdmin,verifyCart } from "../utils/verifyToken.js";
+import { verifyAdmin,verifyCart,verifyUser,verifyTokenNext } from "../utils/verifyToken.js";
 
 const router = express.Router();
 
-router.post("/",verifyCart,createCart);
+router.post("/:userId/items",verifyTokenNext,createCart);
 
-router.put("/:id",verifyCart,updateCart);
+router.put("/:userId",verifyTokenNext,updateCart);
 
-router.delete("/:id",verifyCart,deleteCart);
+router.delete("/:userId/items/:itemId",verifyTokenNext,deleteCart);
 
-router.get("/:id",getCart);
-
-router.get("/item/:id",getCartItems);
+router.get("/:userId",getCart);
 
 export default router;

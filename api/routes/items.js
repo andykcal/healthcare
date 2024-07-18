@@ -6,16 +6,15 @@ import {
     updateItem,
     deleteItem
 } from "../controllers/item.js";
-import Cart from "../models/Item.js";
 import { verifyAdmin } from "../utils/verifyToken.js";
 
 const router = express.Router();
 
-router.post("/:cartId",verifyAdmin,createItem);
+router.post("/",createItem);
 
 router.put("/:id",verifyAdmin,updateItem);
 
-router.delete("/:id/:cartId",verifyAdmin,deleteItem);
+router.delete("/:id",verifyAdmin,deleteItem);
 
 router.get("/:id",getItem);
 

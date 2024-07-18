@@ -2,7 +2,6 @@
 import React from 'react';
 import './Icons.css';
 import { useNavigate } from 'react-router';
-
 const Icons = () => {
     const navigate=useNavigate()
     return (

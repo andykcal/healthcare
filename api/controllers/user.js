@@ -2,57 +2,78 @@ import path from "path";
 import User from "../models/User.js";
 import fs from 'fs';
 import { fileURLToPath } from "url";
+import pool from "../db.js";
 const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 
-export const updateUser = async(req,res,next) => {
+export const updateUser = async(req,res) => {
+    const {id} = req.params;
+    const {email,phone} = req.body;
     try{
-        console.log(req.params.id)
-        console.log(req.body)
-        const updatedUser = await 
-        User.findByIdAndUpdate(
-            req.params.id,
-            {$set: req.body},
-            {new:true}
-        );
-
-        console.log("req.body:",req.body);
-        res.status(200).json(updatedUser);
-    }catch(err){
-        next(err);
-    }
-}
-export const delelteUser = async(req,res,next) => {
-    try{
-        await User.findByIdAndDelete(req.params.id);
-        try{
-            await User.findByIdAndUpdate(userlId,{
-                $pull: {posts: req.params.id},
-            });
-        }catch(err){
-            next(err);
+        const [result] = await pool.query('UPDATE users SET email=?,phone=? WHERE id=?',[email,phone,id]);
+        if(result.affectedRows>0){
+            res.status(200).json({id,email,phone});
+         }else{
+            res.status(404).json({error:"User not found"});
         }
-        res.status(200).json("User has been deleted");
-    }catch(err){
-        next(err);
+    }catch(error){
+        res.status(400).json({error:error.message});
+    }
+};
+
+export const delelteUser = async(req,res) => {
+    const {id} = req.params;
+    try{
+        const [result] = await pool.query("DELETE FROM users WHERE id=?",[id]);
+        if(result.affectedRows > 0){
+            res.status(200).json({message:"삭제 성공"});
+        }else{
+            res.status(404).json({error:"User not found"});
+        }
+    }catch(error){
+        res.status(400).json({error:error.message});
     }
 }
-export const getUser = async(req,res,next) => {
+export const getUser = async(req,res) => {
+    const {id} = req.params;
+
     try{
-        const user = await User.findById(req.params.id);
-        res.status(200).json(user);
-    }catch(err){
-        next(err);
+        const [rows] = await pool.query(
+            `SELECT
+                u.id AS id,
+                u.username AS username,
+                u.email AS email,
+                u.phone AS phone
+            FROM
+                users u
+            WHERE
+                u.id=?`,[id]);
+    if(rows.length>0){
+        res.status(200).json(rows[0]);
+    }else{
+        res.status(404).json({error:"User not found"});
+        }
+    }catch(error){
+        res.status(400).json({error:error.message});
     }
 }
-export const getUsers = async(req,res,next) => {
+export const getUsers = async(req,res) => {
     try{
-        const users = await User.find();
-        res.status(200).json(users);
-    }catch(err){
-        next(err);
+    const [rows] = await pool.query(
+        `SELECT
+            u.id AS id,
+            u.username AS username,
+            u.email AS email,
+            u.phone As phone
+        FROM
+            users u`
+    );
+    res.status(200).json({rows:rows});
+    }catch(error){
+        res.status(400).json({error:error.message});
     }
+
 }
 export const updateProfileImage=async(req,res,next)=>{
     try{

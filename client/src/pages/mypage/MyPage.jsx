@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useNavigate} from 'react-router';
 import Footer from '../../components/footer/Footer';
 import { useSelector } from 'react-redux';
-import '../../cart/Detail.css';
+import '../cart/Detail.css';
 axios.defaults.baseURL = process.env.REACT_APP_API_URL||"http://localhost:8800/api";
 axios.defaults.withCredentials=true;
 
@@ -14,6 +14,7 @@ axios.defaults.withCredentials=true;
 
 const Mypage = () =>{
     const[mpData,setMpData] = useState({
+        username:"",
         phone:"",
         img:"",
     });    
@@ -31,7 +32,7 @@ const Mypage = () =>{
                 id:user.id,
             });
         }
-    },[user]);
+    },[user]);   
     const handleChange = (e) =>{
         const{name,value,files} = e.target;
         if(name === "img" && files){
@@ -49,9 +50,8 @@ const Mypage = () =>{
     const handleSave = async() => {
         try{
             const apiUrl =process.env.REACT_APP_API_URL;
-            const userId=user._id;
+            const userId=user.id;
             const updatedData = {...mpData};
-
             console.log(updatedData);
 
             if(newImage){
@@ -66,11 +66,12 @@ const Mypage = () =>{
                 updatedData,{withCredentials:true});
                 alert("프로필이 성공적으로 업데이트되었습니다.");
                 dispatch({type:"UPDATE_SUCCESS",
-                    payload:res.data});
+                    payload:res.data.result});
                     setEditMode(false);
                     navigate("/mypage");
        }catch(err){
         console.log("err:",err);
+        console.log("user.id",user.id);
             alert("프로필 업데이트 중 오류가 발생했습니다.");
         }
     };
@@ -88,16 +89,16 @@ return(
         <input type="file" id="img" name='img' onChange={handleChange}/>
         </div>
         <div className='myPageInfo'>
-        <p>이름:{id}</p>
+        <p>이름:{mpData.id}</p>
         </div>
         <div className='myPageInfo'>
-        <p>아이디:{username}</p>   
+        <p>아이디:{mpData.username}</p>   
         </div>
         <div className='myPageInfo'>
-        이메일: <input type="email" id="email" name="email" className='mypageInput' onChange={handleChange}></input>   
+        이메일: <input type="email" id="email" name="email" className='mypageInput' onChange={handleChange} value={mpData.email}></input>   
         </div>
         <div className='myPageInfo'>
-        핸드폰: <input type="text" id="phone" name="phone" className='mypageInput' onChange={handleChange}></input>
+        핸드폰: <input type="text" id="phone" name="phone" className='mypageInput' onChange={handleChange} value={mpData.phone}></input>
         </div>
 
             <button onClick={handleSave} className='MyPageButton'>수정완료</button>

@@ -18,24 +18,22 @@ const Navbar = () => {
   const Mypage = () => {
     navigate("/mypage");
   }
-  const logout = async (e, dispatch, navigate) => {
-    e.preventDefault();
+  const logout = async () => {
     try {
       const apiUrl = process.env.REACT_APP_API_URL;
       console.log("apiUrl",apiUrl)
-      if (!apiUrl) {
-        throw new Error("API URL is not defined in the environment variables");
-      }
-      const res = await axios.post(`${apiUrl}/auth/logout`, {
-        withCredentials: true
-      });
-  
+      // if (!apiUrl) {
+      //   throw new Error("API URL is not defined in the environment variables");
+      // }
+      const res = await axios.post(`${apiUrl}/auth/logout`, {}, 
+        {withCredentials: true});
+      console.log("res.data",res.data);
       dispatch({ type: "LOGOUT" });
       navigate("/");
-      console.log(res.data);
     } catch (err) {
       console.error("Logout failed:", err);
       alert("An error occurred while logging out. Please try again.");
+      console.log("user.id",user.id);
     }
   };
   return (
@@ -49,8 +47,8 @@ const Navbar = () => {
       <button className="logo" onClick={()=>navigate("/")}>Healthcare</button>    
         {user?  (
         <div className="navItems">
-          {user.id}님 환영합니다!
-          <button className="navButton" onClick={(e) => logout(e, dispatch, navigate)}>로그아웃</button> 
+          {user.username}님 환영합니다!
+          <button className="navButton" onClick={logout}>로그아웃</button> 
         </div>
         ): (
         <div className="navItems">

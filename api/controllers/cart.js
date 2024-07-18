@@ -1,54 +1,82 @@
 import Cart from "../models/Cart.js";
 import Item from "../models/Item.js";
-export const createCart = async (req,res,next) =>{
-    const newCart = new Cart(req.body);
+import pool from "../db.js";
+export const createCart = async (req,res) =>{
+    const {userId}=req.params;
+    const {itemId,quantity}=req.body;
 
+    console.log("req.body:",req.body);
+    console.log("userId",userId);
     try{
-        const savedCart = await newCart.save();
-        res.status(200).json(savedCart);
-    }catch(err){
-        next(err);
+        const [cart] = await pool.query("SELECT * FROM carts WHERE user_id=?",[userId]);
+        let cartId;
+        if(cart.length>0){
+            cartId=cart[0].id;
+            console.log("cartId",cartId);
+        }else{
+            const [result] = await pool.query(`INSERT INTO carts (user_id) VALUES (?)`,[userId]);
+            cartId=result.insertId;
+            console.log("cartId2",cartId);
+        }
+        const [result] = await pool.query(`INSERT INTO cart_items (cart_id,item_id,quantity) VALUES (?,?,?)`,[cartId,itemId,quantity]);
+        res.status(200).json({itemId,quantity});
+    }catch(error){
+        res.status(400).json({error:error.message});
     }
 };
 export const updateCart = async(req,res,next) => {
-    try{
-        const updatedCart = await Cart.findByIdAndUpdate(
-            req.params.id,
-            {$set:req.body},
-            {new:true}
-        );
-        res.status(200).json(updatedCart);
-    }catch(err){
-        next(err);
+       const {userId,itemId} =req.params;
+       const {quantity} = req.body;
+       try{
+        const [cart] = await pool.query(`SELECT * FROM carts WHERE id=?`,[userId]);
+        if(cart.length>0){
+            const cartId = cart[0].id;
+            const [result] = await pool.query(`UPDATE cart_items SET quantity=? WHERE cart_id=? AND id=?`,[quantity,cartId,userId])
+            res.status(200).json({quantity,cartId,userId});
+            if(result.affectedRows>0){
+                res.status(200).json({id:itemId,card_id:cartId,quantity});
+            }else{
+                res.status(404).json({error:"item not found"});
+            }
+        }else{
+            res.status(404).json({error:"Cart not found"});
+        }
+}catch(error){
+    res.status(400).json({error:error.message});
     }
 }
 export const deleteCart = async(req,res,next) => {
+    const {userId,itemId}=req.params;
+    console.log("userId",userId);
+    console.log("itemId",itemId);
     try{
-        await Cart.findByIdAndDelete(req.params.id);
-        res.status(200).json("Cart has been deleted");
-    }catch(err){
-        next(err);
+        const [cart] = await pool.query(`SELECT * FROM carts WHERE id=?`,[userId]);
+        if(cart.length>0){
+            const cartId=cart[0].id;
+            const [result] = await pool.query(`DELETE FROM cart_items WHERE cart_id=? AND id=?`,[cartId,itemId]);
+            if(result.affectedRows>0){
+                res.status(200).json({message:"삭제 완료"});
+            }else{
+                res.status(404).json({error:"Item not found"});
+            }
+        }else{
+            res.status(400).json({error:error.message});
+        }
+    }catch(error){
+        res.status(400).json({error:error.message});
     }
 };
 export const getCart = async(req,res,next) => {
+    const {userId} = req.params;
+    console.log("userId",userId);
     try{
-        console.log(req.params.id)
-        const cart = await Cart.findById(req.params.id);
-        res.status(200).json(cart);
-    }catch(err){
-        next(err);
+        const [cart] = await pool.query("SELECT * FROM carts WHERE user_id=?",[userId])
+        if(cart.length>0){
+        res.status(200).json({cart});
+        }else{
+            res.status(404).json({error:"Cart not found"});
+        }
+    }catch(error){
+        res.status(400).json({error:error.message});
     }
 };
-export const getCartItems = async(req,res,next) => {
-    try{
-        const cart = await Cart.findById(req.params.id);
-        const list = await Promise.all(
-            cart.items.map((item) => {
-                return Item.findById(item);
-            })
-        );
-        res.statue(200).json(list)
-    }catch(err){
-        next(err);
-    }
-}

@@ -18,8 +18,7 @@ import store from "./pages/shop/Store";
 import SportDetail from "./pages/sport/SportDetail";
 import SportProduct from "./pages/sport/SportProduct";
 import SportProductDetail from "./pages/sport/SportProductDetail";
-// import configurestore from "./configurestore";
-import Cart from "./cart/Detail";
+import Cart from "./pages/cart/Detail";
 import CheckBox from "./pages/register/CheckBox";
 import ProductPage from "./pages/shop/Prodcut";
 function App() {
